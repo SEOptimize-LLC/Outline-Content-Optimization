@@ -107,12 +107,38 @@ The `.python-version` file is already included in this repository, so if you clo
 3. **Contextual Structure (The Format)**: Article methodology rules and format specifications
 4. **Contextual Connections (Internal Linking)**: Strategic link opportunities with anchor text
 
+#### Gap Analysis (NEW - Writer-Focused)
+- **Macro Context Gaps**: Missing EAV pairs, weak source context, intent misalignment
+- **Micro Context Gaps**: Missing entities, predicates, temporal elements, question types
+- **Distributional Semantics Gaps**: Missing co-occurring terms and contextual dance patterns
+- **Content Structure Gaps**: Heading issues, hierarchy problems, missing internal links
+- **For Each Gap**: Specific location + WHY it matters + EXAMPLE text to add
+
+#### Optimization Action Plan (NEW - Copy-Paste Ready)
+- **Priority 1: Critical Fixes** - Do these first (with before/after examples)
+- **Priority 2: Important Enhancements** - Do these next
+- **Priority 3: Nice-to-Have** - Do if time permits
+- **Heading Optimization**: Before/After structure with reasoning
+- **Co-occurrence Optimization**: Exact paragraphs with term clusters to add
+- **Internal Linking**: Anchor text + annotation text + exact placement
+- **EAV Additions**: Missing entity-attribute-value pairs with example sentences
+- **Macro Context Strengthening**: Specific improvements with before/after text
+
+#### Fully Optimized Version (NEW - AI-Generated)
+- **Complete Rewrite**: Implements all Priority 1 & 2 recommendations
+- **Side-by-Side Comparison**: Original vs. Optimized with word count metrics
+- **Maintains Structure**: Preserves your original outline while enhancing semantics
+- **Ready to Publish**: Clean markdown, properly formatted
+
 #### Comprehensive Reporting
 - **Entity Validation Report**: Confirms primary entity accuracy
 - **Complete Semantic Analysis**: Macro + Micro context in structured format
 - **Distributional Semantics Tables**: Visual co-occurrence data
-- **Actionable Content Brief**: Ready-to-implement optimization roadmap
-- **Downloadable Reports**: Markdown export for all analyses
+- **Gap Analysis**: What's missing with specific examples
+- **Action Plan**: Prioritized, copy-paste ready optimization steps
+- **Content Brief**: 4-column framework for strategic implementation
+- **Optimized Version**: Fully rewritten content implementing all changes
+- **Downloadable Reports**: Individual downloads + complete report with all analyses
 
 ## 📋 Requirements
 
@@ -279,19 +305,44 @@ Click "Deploy!" and wait for the app to build. First deployment may take 3-5 min
    - Generates co-occurrence matrix
    - Identifies term pairs and contextual dance
 
-   **Stage 5 - Content Brief Generation (Optional):**
+   **Stage 5 - Gap Analysis (Optional):**
+   - Identifies specific missing elements across 4 categories
+   - Provides "What's missing" + "Why it matters" + "Example text" for each gap
+   - Writer-friendly format with exact locations to add content
+
+   **Stage 6 - Optimization Action Plan (Optional):**
+   - Priority 1 (Critical), Priority 2 (Important), Priority 3 (Nice-to-have)
+   - Before/After examples for every change
+   - Copy-paste ready text suggestions
+   - Heading optimization with reasoning
+   - Co-occurrence instructions with example paragraphs
+   - Internal linking with anchor text and placement
+   - EAV additions with example sentences
+
+   **Stage 7 - Content Brief Generation (Optional):**
    - Contextual Vector: Optimal heading flow
    - Contextual Hierarchy: Coverage weights
    - Contextual Structure: Format specifications
    - Contextual Connections: Internal linking strategy
 
+   **Stage 8 - Fully Optimized Version (Optional):**
+   - Complete rewrite implementing all recommendations
+   - Side-by-side comparison with original
+   - Word count metrics showing expansion/changes
+   - Ready-to-publish markdown format
+
 5. **Review Analysis**:
    - Expandable sections for each analysis stage
    - Visual tables for distributional semantics
-   - Complete content brief with actionable recommendations
+   - Gap analysis with specific missing elements
+   - **Action Plan with copy-paste ready suggestions (KEY FOR WRITERS)**
+   - Complete content brief with strategic recommendations
+   - Before/after comparison of optimized version
+
 6. **Download Reports**:
-   - Individual reports (entity validation, content brief)
-   - Complete semantic SEO analysis report
+   - Individual reports (gap analysis, action plan, content brief, optimized version)
+   - Complete semantic SEO analysis report with all analyses combined
+   - **Action Plan is the most actionable for immediate writer implementation**
 
 ## 🧠 Technical Architecture
 
@@ -413,6 +464,10 @@ Recent additions:
 - [✅] Entity-Attribute-Value (EAV) extraction
 - [✅] Distributional semantics analysis
 - [✅] 4-column content brief generator
+- [✅] **Gap Analysis** - Identifies missing elements with examples
+- [✅] **Optimization Action Plan** - Prioritized, copy-paste ready steps for writers
+- [✅] **Fully Optimized Version** - AI-generated rewrite with before/after comparison
+- [✅] Writer-focused actionable outputs across all 3 tabs
 
 Future enhancements:
 - [ ] Topical map visualization tool

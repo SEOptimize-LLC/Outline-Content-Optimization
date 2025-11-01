@@ -760,6 +760,163 @@ Be specific and analytical in your response."""
 
     return call_ai_model(prompt, model, max_tokens=1000)
 
+def generate_gap_analysis(content, primary_keyword, macro_context, micro_context, model):
+    """Identify specific gaps and missing elements in the content"""
+
+    prompt = f"""You are an expert content optimizer using Koray Tuğberk GÜBÜR's Semantic SEO framework.
+
+PRIMARY ENTITY: {primary_keyword}
+
+MACRO CONTEXT ANALYSIS:
+{macro_context[:1500]}
+
+MICRO CONTEXT ANALYSIS:
+{micro_context[:1500]}
+
+CURRENT CONTENT:
+{content[:3000]}
+
+Perform a detailed GAP ANALYSIS identifying what's MISSING or WEAK:
+
+## 1. MACRO CONTEXT GAPS
+- Missing EAV (Entity-Attribute-Value) pairs that should be included
+- Weak or unclear source context signals
+- User intent misalignment
+- Missing topical clusters (core vs. author sections)
+
+## 2. MICRO CONTEXT GAPS
+- Missing semantically relevant entities
+- Weak predicates (relationships between concepts)
+- Missing temporal elements (dates, durations, timelines)
+- Insufficient conditional synonyms
+- Missing co-occurring term clusters
+- Absent question types (boolean, definitional, comparative, etc.)
+
+## 3. DISTRIBUTIONAL SEMANTICS GAPS
+- Terms that should co-occur but don't
+- Missing contextual dance patterns
+- Weak word proximities
+
+## 4. CONTENT STRUCTURE GAPS
+- Missing or poorly structured headings
+- Incorrect contextual hierarchy (macro/micro balance)
+- Missing internal linking opportunities
+- Weak contextual vector (heading flow)
+
+For EACH gap identified, provide:
+- **What's missing**: Specific element
+- **Why it matters**: Impact on semantic SEO
+- **Where to add it**: Specific section/paragraph
+- **Example**: Concrete text suggestion
+
+Be highly specific and actionable. Writers should know exactly what to add."""
+
+    return call_ai_model(prompt, model, max_tokens=4000)
+
+def generate_optimization_action_plan(content, primary_keyword, macro_context, micro_context, gap_analysis, model):
+    """Generate prioritized, actionable optimization steps for writers"""
+
+    prompt = f"""You are an expert content optimizer using Koray Tuğberk GÜBÜR's Semantic SEO framework.
+
+PRIMARY ENTITY: {primary_keyword}
+
+MACRO CONTEXT:
+{macro_context[:1000]}
+
+MICRO CONTEXT:
+{micro_context[:1000]}
+
+GAP ANALYSIS:
+{gap_analysis[:2000]}
+
+CURRENT CONTENT:
+{content[:2000]}
+
+Generate a WRITER-FRIENDLY OPTIMIZATION ACTION PLAN with specific, copy-paste ready suggestions.
+
+## PRIORITY 1: CRITICAL FIXES (Do These First)
+For each critical fix:
+- **Action**: Specific change to make
+- **Location**: Exact section/paragraph (e.g., "After H2: Introduction")
+- **Before**: Current text (if applicable)
+- **After**: Replacement text (copy-paste ready)
+- **Reasoning**: Why this improves semantic SEO
+
+## PRIORITY 2: IMPORTANT ENHANCEMENTS (Do These Next)
+Same format as Priority 1
+
+## PRIORITY 3: NICE-TO-HAVE IMPROVEMENTS (Do If Time Permits)
+Same format as Priority 1
+
+## HEADING OPTIMIZATION
+Current heading structure vs. Optimized heading structure
+- Show BEFORE and AFTER for each heading
+- Explain the semantic improvement
+
+## CO-OCCURRENCE OPTIMIZATION
+Specific paragraphs where term clusters should appear together:
+- **Section**: Where to add
+- **Terms to co-occur**: List the 3-5 terms
+- **Example paragraph**: Copy-paste ready text that includes proper co-occurrence
+
+## INTERNAL LINKING RECOMMENDATIONS
+- **Anchor text**: Exact text to use
+- **Link target**: Where it should link to (describe the topic)
+- **Annotation text**: Text to appear before/after the link
+- **Placement**: Exact location in content
+
+## ENTITY-ATTRIBUTE-VALUE ADDITIONS
+Missing EAV pairs to add:
+- **Entity - Attribute**: What's missing
+- **Where to add**: Specific section
+- **Example sentence**: Copy-paste ready
+
+## MACRO CONTEXT STRENGTHENING
+- **Current macro context score**: Weak/Moderate/Strong
+- **Specific improvements**: What to change
+- **Example**: Before/After text
+
+Make every suggestion copy-paste ready. Writers should be able to implement changes immediately without additional research or thinking."""
+
+    return call_ai_model(prompt, model, max_tokens=6000)
+
+def generate_optimized_version(content, primary_keyword, action_plan, model):
+    """Generate a fully optimized version of the content based on the action plan"""
+
+    prompt = f"""You are an expert content writer implementing Koray Tuğberk GÜBÜR's Semantic SEO framework.
+
+PRIMARY ENTITY: {primary_keyword}
+
+OPTIMIZATION ACTION PLAN:
+{action_plan[:3000]}
+
+CURRENT CONTENT:
+{content}
+
+Generate a FULLY OPTIMIZED VERSION of this content by implementing ALL the recommendations from the action plan.
+
+REQUIREMENTS:
+1. Maintain or expand the original word count
+2. Implement ALL Priority 1 and Priority 2 changes
+3. Optimize heading structure for contextual vector
+4. Add missing EAV (Entity-Attribute-Value) pairs naturally
+5. Ensure proper co-occurrence of term clusters in relevant sections
+6. Strengthen macro context (60-70% of content)
+7. Add micro context elements (30-40% of content)
+8. Include internal linking anchor text with proper annotation
+9. Add missing temporal elements, predicates, and conditional synonyms
+10. Ensure proper discourse flow with anchor segments
+
+OUTPUT FORMAT:
+- Clean Markdown
+- Properly structured headings (H1, H2, H3)
+- Natural, readable prose
+- Ready to publish
+
+Generate the complete optimized article now."""
+
+    return call_ai_model(prompt, model, max_tokens=8000)
+
 # === MAIN APP ===
 def main():
     st.markdown('<p class="main-header">✍️ Blog Post Optimizer</p>', unsafe_allow_html=True)
@@ -1175,6 +1332,26 @@ def main():
             )
 
             st.markdown("---")
+
+            generate_gap_analysis_ui = st.checkbox(
+                "Generate Gap Analysis",
+                value=True,
+                help="Identify specific missing elements and weaknesses"
+            )
+
+            generate_action_plan = st.checkbox(
+                "Generate Action Plan",
+                value=True,
+                help="Create prioritized, copy-paste ready optimization steps for writers"
+            )
+
+            generate_optimized = st.checkbox(
+                "Generate Optimized Version",
+                value=False,
+                help="Create fully optimized content implementing all recommendations"
+            )
+
+            st.markdown("---")
             st.markdown("### Framework Elements")
             st.info("""
 **Macro Context:**
@@ -1289,10 +1466,61 @@ def main():
 
                 progress.progress(100)
 
-                # Step 5: Generate Content Brief (Optional)
+                # Step 5: Generate Gap Analysis (Optional)
+                gap_analysis_result = None
+                if generate_gap_analysis_ui and macro_context and micro_context:
+                    st.markdown("---")
+                    with st.spinner("🔍 Step 5: Performing gap analysis..."):
+                        gap_analysis_result = generate_gap_analysis(
+                            content_input,
+                            primary_entity,
+                            macro_context,
+                            micro_context,
+                            selected_model
+                        )
+                        st.session_state.semantic_results['gap_analysis'] = gap_analysis_result
+
+                        if gap_analysis_result:
+                            st.success("✅ Gap analysis complete!")
+                            with st.expander("🔍 Gap Analysis - What's Missing", expanded=True):
+                                st.markdown(gap_analysis_result)
+                                st.info("💡 **For Writers**: Each gap includes WHERE to add it and EXAMPLE text to use.")
+
+                # Step 6: Generate Action Plan (Optional)
+                action_plan_result = None
+                if generate_action_plan and macro_context and micro_context:
+                    st.markdown("---")
+                    with st.spinner("📋 Step 6: Generating optimization action plan..."):
+                        # Use gap analysis if available, otherwise pass empty string
+                        gap_for_plan = gap_analysis_result if gap_analysis_result else "No gap analysis performed."
+
+                        action_plan_result = generate_optimization_action_plan(
+                            content_input,
+                            primary_entity,
+                            macro_context,
+                            micro_context,
+                            gap_for_plan,
+                            selected_model
+                        )
+                        st.session_state.semantic_results['action_plan'] = action_plan_result
+
+                        if action_plan_result:
+                            st.success("✅ Optimization action plan generated!")
+                            with st.expander("📋 Writer Action Plan - Copy-Paste Ready", expanded=True):
+                                st.markdown(action_plan_result)
+                                st.success("✅ **For Writers**: All suggestions are copy-paste ready. Prioritized by importance.")
+
+                            # Download Action Plan separately
+                            action_plan_filename = f"action_plan_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+                            st.markdown(
+                                create_download_link(action_plan_result, action_plan_filename),
+                                unsafe_allow_html=True
+                            )
+
+                # Step 7: Generate Content Brief (Optional)
                 if generate_brief and macro_context and micro_context:
                     st.markdown("---")
-                    with st.spinner("📝 Step 5: Generating comprehensive content brief..."):
+                    with st.spinner("📝 Step 7: Generating comprehensive content brief..."):
                         progress_brief = st.progress(0)
 
                         content_brief = generate_content_brief(
@@ -1321,26 +1549,94 @@ def main():
                                 unsafe_allow_html=True
                             )
 
+                # Step 8: Generate Fully Optimized Version (Optional)
+                if generate_optimized and action_plan_result:
+                    st.markdown("---")
+                    st.markdown("## 🚀 Generating Fully Optimized Content")
+                    st.info("⚠️ This will rewrite your entire content implementing all recommendations. Original structure may change significantly.")
+
+                    with st.spinner("✨ Step 8: Generating fully optimized content (this may take 30-60 seconds)..."):
+                        optimized_content = generate_optimized_version(
+                            content_input,
+                            primary_entity,
+                            action_plan_result,
+                            selected_model
+                        )
+                        st.session_state.semantic_results['optimized_content'] = optimized_content
+
+                        if optimized_content:
+                            st.success("✅ Fully optimized content generated!")
+
+                            # Side-by-side comparison
+                            st.markdown("---")
+                            st.markdown("## 📊 Before & After Comparison")
+
+                            compare_col1, compare_col2 = st.columns(2)
+
+                            with compare_col1:
+                                st.markdown("### 📄 Original Content")
+                                st.markdown(content_input[:2000] + "..." if len(content_input) > 2000 else content_input)
+
+                                # Word count comparison
+                                original_words = len(content_input.split())
+                                st.metric("Original Word Count", f"{original_words:,}")
+
+                            with compare_col2:
+                                st.markdown("### ✅ Optimized Content")
+                                st.markdown(optimized_content[:2000] + "..." if len(optimized_content) > 2000 else optimized_content)
+
+                                optimized_words = len(optimized_content.split())
+                                word_change = optimized_words - original_words
+                                st.metric("Optimized Word Count", f"{optimized_words:,}", delta=f"{word_change:+,}")
+
+                            # Full optimized content
+                            st.markdown("---")
+                            st.markdown("### 📄 Full Optimized Content")
+                            with st.expander("View Full Optimized Content", expanded=False):
+                                st.markdown(optimized_content)
+
+                            # Download optimized version
+                            st.markdown("---")
+                            optimized_filename = f"optimized_content_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+                            st.markdown(
+                                create_download_link(optimized_content, optimized_filename),
+                                unsafe_allow_html=True
+                            )
+                elif generate_optimized and not action_plan_result:
+                    st.warning("⚠️ Please enable 'Generate Action Plan' to generate the optimized version.")
+
                 # Summary and Download All
                 st.markdown("---")
                 st.markdown("## 📦 Analysis Summary & Downloads")
 
-                summary_col1, summary_col2, summary_col3 = st.columns(3)
+                summary_col1, summary_col2, summary_col3, summary_col4 = st.columns(4)
 
                 with summary_col1:
                     if 'validation' in st.session_state.semantic_results:
-                        st.metric("Entity Validation", "✅ Complete")
-                    st.metric("Macro Context", "✅ Extracted")
+                        st.metric("Entity Validation", "✅")
+                    st.metric("Macro Context", "✅")
+                    st.metric("Micro Context", "✅")
 
                 with summary_col2:
-                    st.metric("Micro Context", "✅ Extracted")
                     if include_distrib_semantics:
-                        st.metric("Distributional Analysis", "✅ Complete")
+                        st.metric("Distributional Analysis", "✅")
+                    if generate_gap_analysis_ui and 'gap_analysis' in st.session_state.semantic_results:
+                        st.metric("Gap Analysis", "✅")
 
                 with summary_col3:
-                    if generate_brief:
-                        st.metric("Content Brief", "✅ Generated")
-                    st.metric("Framework", "Koray's SEO")
+                    if generate_action_plan and 'action_plan' in st.session_state.semantic_results:
+                        st.metric("Action Plan", "✅")
+                    if generate_brief and 'content_brief' in st.session_state.semantic_results:
+                        st.metric("Content Brief", "✅")
+
+                with summary_col4:
+                    if generate_optimized and 'optimized_content' in st.session_state.semantic_results:
+                        st.metric("Optimized Version", "✅")
+                    st.metric("Framework", "Koray SEO")
+
+                # Highlight actionable outputs for writers
+                st.markdown("---")
+                st.success("✅ **For Writers**: Download the Action Plan for copy-paste ready optimization steps!")
 
                 # Download complete report
                 if st.session_state.semantic_results:
@@ -1399,10 +1695,37 @@ def main():
 
                         complete_report += "\n---\n\n"
 
+                    if 'gap_analysis' in st.session_state.semantic_results:
+                        complete_report += f"""## Gap Analysis - What's Missing
+
+{st.session_state.semantic_results['gap_analysis']}
+
+---
+
+"""
+
+                    if 'action_plan' in st.session_state.semantic_results:
+                        complete_report += f"""## Optimization Action Plan (Copy-Paste Ready)
+
+{st.session_state.semantic_results['action_plan']}
+
+---
+
+"""
+
                     if 'content_brief' in st.session_state.semantic_results:
                         complete_report += f"""## Content Brief (4-Column Framework)
 
 {st.session_state.semantic_results['content_brief']}
+
+---
+
+"""
+
+                    if 'optimized_content' in st.session_state.semantic_results:
+                        complete_report += f"""## Fully Optimized Content
+
+{st.session_state.semantic_results['optimized_content']}
 
 ---
 
@@ -1415,7 +1738,19 @@ def main():
                         unsafe_allow_html=True
                     )
 
-                    st.success("✅ Complete semantic SEO analysis finished! Download your report above.")
+                    st.success("✅ Complete semantic SEO analysis finished! Download your complete report above.")
+
+                    # Add writer instructions
+                    st.info("""
+**📝 For Your Writing Team:**
+
+1. **Start with Gap Analysis** - See what's missing from current content
+2. **Review Action Plan** - Prioritized, copy-paste ready optimization steps
+3. **Use Content Brief** - Strategic framework for overall structure
+4. **Compare Optimized Version** - See before/after to understand improvements
+
+The Action Plan is the most actionable document for immediate implementation!
+                    """)
 
 if __name__ == "__main__":
     main()
