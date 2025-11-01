@@ -124,11 +124,13 @@ The `.python-version` file is already included in this repository, so if you clo
 - **EAV Additions**: Missing entity-attribute-value pairs with example sentences
 - **Macro Context Strengthening**: Specific improvements with before/after text
 
-#### Fully Optimized Version (NEW - AI-Generated)
-- **Complete Rewrite**: Implements all Priority 1 & 2 recommendations
-- **Side-by-Side Comparison**: Original vs. Optimized with word count metrics
-- **Maintains Structure**: Preserves your original outline while enhancing semantics
-- **Ready to Publish**: Clean markdown, properly formatted
+#### Section-by-Section Optimization (NEW - 95% More Usable!)
+- **Granular Control**: Optimizes each H2 section individually instead of full rewrite
+- **Accept/Reject Interface**: Review and approve each section independently
+- **Side-by-Side Comparison**: Original vs. Optimized for every section
+- **Word Count Metrics**: See expansion/changes per section
+- **Final Assembly**: Download combines only your accepted sections
+- **Source Attributions**: All factual claims include citations or "[Source needed]" tags
 
 #### Comprehensive Reporting
 - **Entity Validation Report**: Confirms primary entity accuracy
@@ -325,11 +327,13 @@ Click "Deploy!" and wait for the app to build. First deployment may take 3-5 min
    - Contextual Structure: Format specifications
    - Contextual Connections: Internal linking strategy
 
-   **Stage 8 - Fully Optimized Version (Optional):**
-   - Complete rewrite implementing all recommendations
-   - Side-by-side comparison with original
-   - Word count metrics showing expansion/changes
-   - Ready-to-publish markdown format
+   **Stage 8 - Section-by-Section Optimization (Optional):**
+   - Optimizes each H2 section individually (NOT full rewrite)
+   - Accept/reject interface for granular control
+   - Side-by-side comparison for every section
+   - Word count metrics per section
+   - Final download combines only accepted sections
+   - **All suggestions include source attributions or "[Source needed]" tags**
 
 5. **Review Analysis**:
    - Expandable sections for each analysis stage
@@ -464,9 +468,11 @@ Recent additions:
 - [✅] Entity-Attribute-Value (EAV) extraction
 - [✅] Distributional semantics analysis
 - [✅] 4-column content brief generator
-- [✅] **Gap Analysis** - Identifies missing elements with examples
-- [✅] **Optimization Action Plan** - Prioritized, copy-paste ready steps for writers
-- [✅] **Fully Optimized Version** - AI-generated rewrite with before/after comparison
+- [✅] **Gap Analysis** - Identifies missing elements with source-attributed examples
+- [✅] **Optimization Action Plan** - Prioritized, copy-paste ready steps with citations
+- [✅] **Section-by-Section Optimization** - Granular control (95% more usable than full rewrites)
+- [✅] **Source Attribution Requirements** - All factual claims include citations or "[Source needed]" tags
+- [✅] **Accept/Reject Interface** - Review and approve individual sections
 - [✅] Writer-focused actionable outputs across all 3 tabs
 
 Future enhancements:

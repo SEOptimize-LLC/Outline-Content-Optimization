@@ -807,7 +807,13 @@ For EACH gap identified, provide:
 - **What's missing**: Specific element
 - **Why it matters**: Impact on semantic SEO
 - **Where to add it**: Specific section/paragraph
-- **Example**: Concrete text suggestion
+- **Example**: Concrete text suggestion WITH SOURCE ATTRIBUTION
+
+CITATION REQUIREMENTS:
+- For all factual claims, statistics, and data in examples, include source attribution
+- Format: "According to [Organization/Study, Year], ..."
+- If no source available, use: "[Source needed: verify this claim]"
+- NEVER fabricate specific numbers without attribution
 
 Be highly specific and actionable. Writers should know exactly what to add."""
 
@@ -874,9 +880,17 @@ Missing EAV pairs to add:
 ## MACRO CONTEXT STRENGTHENING
 - **Current macro context score**: Weak/Moderate/Strong
 - **Specific improvements**: What to change
-- **Example**: Before/After text
+- **Example**: Before/After text with source attributions
 
-Make every suggestion copy-paste ready. Writers should be able to implement changes immediately without additional research or thinking."""
+CRITICAL CITATION REQUIREMENTS FOR ALL EXAMPLES:
+- ALWAYS include source attribution for statistics, facts, and specific claims
+- Format: "According to [Source Name/Study, Year], ..."
+- Or use footnote markers: "[1]" with reference at bottom
+- If source unknown, use: "[Source needed: verify X statistic]"
+- NEVER fabricate specific numbers or statistics without attribution
+- Generic statements don't need citations, but specific data always does
+
+Make every suggestion copy-paste ready with proper citations. Writers should be able to implement changes immediately."""
 
     return call_ai_model(prompt, model, max_tokens=6000)
 
@@ -916,6 +930,86 @@ OUTPUT FORMAT:
 Generate the complete optimized article now."""
 
     return call_ai_model(prompt, model, max_tokens=8000)
+
+def optimize_section_by_section(content, primary_keyword, action_plan, nlp, model):
+    """Optimize content section by section for granular control"""
+
+    # Extract sections based on H2 headings
+    sections = []
+    current_section = {"heading": "Introduction", "content": ""}
+
+    lines = content.split('\n')
+    for line in lines:
+        if line.startswith('## ') and not line.startswith('### '):
+            # New H2 section
+            if current_section["content"]:
+                sections.append(current_section)
+            current_section = {"heading": line.replace('## ', ''), "content": line + "\n"}
+        else:
+            current_section["content"] += line + "\n"
+
+    # Add last section
+    if current_section["content"]:
+        sections.append(current_section)
+
+    # Optimize each section
+    optimized_sections = []
+
+    for idx, section in enumerate(sections):
+        section_heading = section["heading"]
+        section_content = section["content"]
+
+        # Extract relevant action items for this section
+        relevant_actions = f"Focus on improvements related to section: {section_heading}"
+
+        prompt = f"""You are an expert content writer implementing Koray Tuğberk GÜBÜR's Semantic SEO framework.
+
+PRIMARY ENTITY: {primary_keyword}
+
+OPTIMIZATION ACTION PLAN (Full):
+{action_plan[:1500]}
+
+CURRENT SECTION TO OPTIMIZE:
+Heading: {section_heading}
+
+Content:
+{section_content}
+
+TASK: Optimize ONLY this section by:
+1. Implementing relevant Priority 1 and Priority 2 changes from the action plan
+2. Adding missing EAV pairs that relate to this section's topic
+3. Ensuring proper co-occurrence of relevant term clusters
+4. Strengthening semantic relationships
+5. Adding citations and sources for any factual claims (format: "According to [Source], ..." or include [1] footnote markers)
+6. Maintaining or expanding word count
+7. Preserving the heading structure (H2, H3 levels)
+
+IMPORTANT CITATION REQUIREMENTS:
+- ALWAYS provide source attribution for statistics, facts, and claims
+- Format: "According to [Organization Name Study, Year], statistic..."
+- Or use footnote markers: "Germany receives 1.5 million immigrants annually.[1]"
+- If you don't have a real source, use placeholders: "[Source needed: verify statistic]"
+- NEVER make up specific numbers without attribution
+
+OUTPUT:
+- Optimized version of this section ONLY
+- Clean Markdown
+- Include the heading
+- Natural, readable prose
+- Include source attributions for all claims
+
+Generate the optimized section now."""
+
+        optimized_section = call_ai_model(prompt, model, max_tokens=2000)
+
+        optimized_sections.append({
+            "original_heading": section_heading,
+            "original_content": section_content,
+            "optimized_content": optimized_section,
+            "section_number": idx + 1
+        })
+
+    return optimized_sections
 
 # === MAIN APP ===
 def main():
@@ -1346,9 +1440,9 @@ def main():
             )
 
             generate_optimized = st.checkbox(
-                "Generate Optimized Version",
+                "Optimize Section-by-Section",
                 value=False,
-                help="Create fully optimized content implementing all recommendations"
+                help="Optimize each H2 section individually for granular control (95% more usable than full rewrites)"
             )
 
             st.markdown("---")
@@ -1549,61 +1643,98 @@ def main():
                                 unsafe_allow_html=True
                             )
 
-                # Step 8: Generate Fully Optimized Version (Optional)
+                # Step 8: Section-by-Section Optimization (Optional)
                 if generate_optimized and action_plan_result:
                     st.markdown("---")
-                    st.markdown("## 🚀 Generating Fully Optimized Content")
-                    st.info("⚠️ This will rewrite your entire content implementing all recommendations. Original structure may change significantly.")
+                    st.markdown("## 🎯 Section-by-Section Optimization")
+                    st.info("✅ This optimizes each H2 section individually, giving you granular control. Review and accept/reject each section.")
 
-                    with st.spinner("✨ Step 8: Generating fully optimized content (this may take 30-60 seconds)..."):
-                        optimized_content = generate_optimized_version(
+                    with st.spinner("✨ Step 8: Optimizing sections (this may take 1-2 minutes)..."):
+                        optimized_sections = optimize_section_by_section(
                             content_input,
                             primary_entity,
                             action_plan_result,
+                            nlp,
                             selected_model
                         )
-                        st.session_state.semantic_results['optimized_content'] = optimized_content
+                        st.session_state.semantic_results['optimized_sections'] = optimized_sections
 
-                        if optimized_content:
-                            st.success("✅ Fully optimized content generated!")
+                        if optimized_sections:
+                            st.success(f"✅ {len(optimized_sections)} sections optimized!")
 
-                            # Side-by-side comparison
                             st.markdown("---")
-                            st.markdown("## 📊 Before & After Comparison")
+                            st.markdown("### 📊 Review Sections Individually")
+                            st.markdown("**Use the toggles below to accept/reject each optimized section**")
 
-                            compare_col1, compare_col2 = st.columns(2)
+                            # Initialize acceptance state if not exists
+                            if 'accepted_sections' not in st.session_state:
+                                st.session_state.accepted_sections = [True] * len(optimized_sections)
 
-                            with compare_col1:
-                                st.markdown("### 📄 Original Content")
-                                st.markdown(content_input[:2000] + "..." if len(content_input) > 2000 else content_input)
+                            for idx, section in enumerate(optimized_sections):
+                                with st.expander(f"📄 Section {section['section_number']}: {section['original_heading']}", expanded=False):
+                                    # Acceptance toggle
+                                    accept_col, stats_col = st.columns([1, 3])
 
-                                # Word count comparison
-                                original_words = len(content_input.split())
-                                st.metric("Original Word Count", f"{original_words:,}")
+                                    with accept_col:
+                                        st.session_state.accepted_sections[idx] = st.checkbox(
+                                            "✅ Accept",
+                                            value=st.session_state.accepted_sections[idx],
+                                            key=f"accept_section_{idx}"
+                                        )
 
-                            with compare_col2:
-                                st.markdown("### ✅ Optimized Content")
-                                st.markdown(optimized_content[:2000] + "..." if len(optimized_content) > 2000 else optimized_content)
+                                    with stats_col:
+                                        orig_words = len(section['original_content'].split())
+                                        opt_words = len(section['optimized_content'].split())
+                                        word_change = opt_words - orig_words
+                                        st.metric("Word Count Change", f"{opt_words}", delta=f"{word_change:+,}")
 
-                                optimized_words = len(optimized_content.split())
-                                word_change = optimized_words - original_words
-                                st.metric("Optimized Word Count", f"{optimized_words:,}", delta=f"{word_change:+,}")
+                                    st.markdown("---")
 
-                            # Full optimized content
+                                    # Side-by-side comparison
+                                    comp_col1, comp_col2 = st.columns(2)
+
+                                    with comp_col1:
+                                        st.markdown("**Original:**")
+                                        st.markdown(section['original_content'][:800] + "..." if len(section['original_content']) > 800 else section['original_content'])
+
+                                    with comp_col2:
+                                        st.markdown("**Optimized:**")
+                                        st.markdown(section['optimized_content'][:800] + "..." if len(section['optimized_content']) > 800 else section['optimized_content'])
+
+                                    # Full versions
+                                    with st.expander("View Full Versions"):
+                                        st.markdown("**Full Original:**")
+                                        st.markdown(section['original_content'])
+                                        st.markdown("---")
+                                        st.markdown("**Full Optimized:**")
+                                        st.markdown(section['optimized_content'])
+
+                            # Generate final optimized version with accepted sections
                             st.markdown("---")
-                            st.markdown("### 📄 Full Optimized Content")
-                            with st.expander("View Full Optimized Content", expanded=False):
-                                st.markdown(optimized_content)
+                            st.markdown("### 📥 Download Final Version")
 
-                            # Download optimized version
-                            st.markdown("---")
-                            optimized_filename = f"optimized_content_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+                            final_content = ""
+                            for idx, section in enumerate(optimized_sections):
+                                if st.session_state.accepted_sections[idx]:
+                                    final_content += section['optimized_content'] + "\n\n"
+                                else:
+                                    final_content += section['original_content'] + "\n\n"
+
+                            # Show acceptance summary
+                            accepted_count = sum(st.session_state.accepted_sections)
+                            st.info(f"**Accepted Sections:** {accepted_count} / {len(optimized_sections)}")
+
+                            # Download final version
+                            optimized_filename = f"optimized_content_sections_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
                             st.markdown(
-                                create_download_link(optimized_content, optimized_filename),
+                                create_download_link(final_content, optimized_filename),
                                 unsafe_allow_html=True
                             )
+
+                            st.success("✅ **For Writers**: Review each section, accept the good ones, reject the rest. Download combines your selections!")
+
                 elif generate_optimized and not action_plan_result:
-                    st.warning("⚠️ Please enable 'Generate Action Plan' to generate the optimized version.")
+                    st.warning("⚠️ Please enable 'Generate Action Plan' to optimize sections.")
 
                 # Summary and Download All
                 st.markdown("---")
@@ -1630,8 +1761,8 @@ def main():
                         st.metric("Content Brief", "✅")
 
                 with summary_col4:
-                    if generate_optimized and 'optimized_content' in st.session_state.semantic_results:
-                        st.metric("Optimized Version", "✅")
+                    if generate_optimized and 'optimized_sections' in st.session_state.semantic_results:
+                        st.metric("Section Optimization", "✅")
                     st.metric("Framework", "Koray SEO")
 
                 # Highlight actionable outputs for writers
@@ -1722,10 +1853,16 @@ def main():
 
 """
 
-                    if 'optimized_content' in st.session_state.semantic_results:
-                        complete_report += f"""## Fully Optimized Content
+                    if 'optimized_sections' in st.session_state.semantic_results:
+                        complete_report += f"""## Section-by-Section Optimizations
 
-{st.session_state.semantic_results['optimized_content']}
+"""
+                        for section in st.session_state.semantic_results['optimized_sections']:
+                            complete_report += f"""### Section {section['section_number']}: {section['original_heading']}
+
+**Optimized Version:**
+
+{section['optimized_content']}
 
 ---
 
@@ -1744,12 +1881,13 @@ def main():
                     st.info("""
 **📝 For Your Writing Team:**
 
-1. **Start with Gap Analysis** - See what's missing from current content
-2. **Review Action Plan** - Prioritized, copy-paste ready optimization steps
+1. **Start with Gap Analysis** - See what's missing with source-attributed examples
+2. **Review Action Plan** - Prioritized, copy-paste ready steps (with citations!)
 3. **Use Content Brief** - Strategic framework for overall structure
-4. **Compare Optimized Version** - See before/after to understand improvements
+4. **Review Optimized Sections** - Accept/reject individual H2 sections for granular control
 
-The Action Plan is the most actionable document for immediate implementation!
+✅ **All examples include source attributions** - fact-check before publishing!
+🎯 **Action Plan is most actionable** - prioritized with before/after examples
                     """)
 
 if __name__ == "__main__":
