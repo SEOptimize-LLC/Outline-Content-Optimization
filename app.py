@@ -525,6 +525,492 @@ OUTPUT the fully optimized content in clean Markdown format.
 
     return call_ai_model(prompt, model, max_tokens=8000)
 
+# === TAB 3: SEMANTIC SEO ANALYZER (Koray Tuğberk GÜBÜR Framework) ===
+
+def extract_macro_context(content, primary_keyword, nlp, semantic_model, model):
+    """Extract macro context elements from content using Koray's framework"""
+
+    prompt = f"""You are an expert in Koray Tuğberk GÜBÜR's Semantic SEO framework. Analyze the following content and extract detailed macro context elements.
+
+PRIMARY KEYWORD/ENTITY: {primary_keyword}
+
+CONTENT:
+{content[:4000]}
+
+Analyze and extract the following MACRO CONTEXT elements:
+
+1. **Primary Topic/Central Entity**: Identify the main subject/entity. Is it the keyword provided or something more specific?
+
+2. **Domain/Authority (Source Context)**: Who is this content for? What's the brand identity? How does it monetize? (e.g., consultancy, e-commerce, educational blog)
+
+3. **User's Intent**: What is the dominant search intent? (Informational, Transactional, Navigational, Investigational)
+
+4. **Search Persona**: Who is searching for this? Demographics, psychographics, expertise level
+
+5. **Main Benefits**: What value does this content provide? How does it connect to the source context?
+
+6. **Entity-Attribute-Value (EAV) Inventory**: List 10-15 key attribute-value pairs for the central entity
+   Format: Entity - Attribute: Value
+   Example: "Germany - Population: 83 million"
+
+7. **Intent & Topical Clusters**: Identify topical clusters and group related intents
+   - Core Section (directly related to monetization)
+   - Author/Outer Section (broader topical authority)
+
+8. **Link Hub Potential**: What would be the ideal root document H1 for a semantic content network around this topic?
+
+Provide detailed, actionable analysis for each element."""
+
+    return call_ai_model(prompt, model, max_tokens=4000)
+
+def extract_micro_context(content, primary_keyword, nlp, semantic_model, model):
+    """Extract micro context elements from content using Koray's framework"""
+
+    # First, use spaCy for entity extraction
+    doc = nlp(content[:10000])  # Limit for performance
+    entities = [(ent.text, ent.label_) for ent in doc.ents][:30]
+
+    # Extract headings for contextual hierarchy
+    headings = extract_headings(content)
+
+    prompt = f"""You are an expert in Koray Tuğberk GÜBÜR's Semantic SEO framework. Analyze the following content and extract detailed micro context elements.
+
+PRIMARY KEYWORD/ENTITY: {primary_keyword}
+
+CONTENT:
+{content[:4000]}
+
+EXTRACTED ENTITIES (from NLP):
+{entities[:20]}
+
+HEADING STRUCTURE:
+{headings[:15]}
+
+Analyze and extract the following MICRO CONTEXT elements:
+
+1. **Semantically Relevant Entities**: List 10-15 entities that support the macro context (beyond the primary entity)
+
+2. **Key Attributes**: What characteristics define and describe the main entity and related entities?
+
+3. **Values**: Specific data points for attributes (numbers, measurements, dates, specifications)
+
+4. **Predicates**: The relationships or actions connecting entities and attributes
+   Example: "Whitening peroxides chemically open tooth pores"
+
+5. **Temporal Elements**: Time-sensitive information, dates, durations, timelines
+
+6. **Conditional Synonyms**: Phrases using conjunctive words (and, or) that create contextual variations
+   Example: "Religion and Belief Structure" or "Costs and Conditions"
+
+7. **Co-occurring Terms (Distributional Semantics)**:
+   - Identify 5-7 term clusters that should appear together in specific sections
+   - Example: ["water", "uric acid", "stone"] for kidney stone content
+
+8. **Annotation Text Patterns**: Text that should appear around internal links for semantic connection
+
+9. **Anchor Segments**: Mutual words that should appear in sequential sentences for discourse flow
+
+10. **Question Types Present**: Categorize existing or implied questions
+    - Boolean (yes/no)
+    - Definitional (what is)
+    - Grouping (types of)
+    - Comparative (versus)
+    - Temporal (how long, when)
+
+11. **Modality and Measurement Units**: Scientific terminology, units, measurements used
+
+12. **Macro vs Micro Content Boundary**: Where does the main content transition to supplementary content?
+
+Provide detailed, actionable analysis for each element."""
+
+    return call_ai_model(prompt, model, max_tokens=4000)
+
+def generate_content_brief(content, primary_keyword, macro_context, micro_context, model):
+    """Generate a comprehensive content brief based on Koray's 4-column framework"""
+
+    prompt = f"""You are an expert in Koray Tuğberk GÜBÜR's Semantic SEO framework. Generate a detailed content brief for optimizing the following content.
+
+PRIMARY KEYWORD/ENTITY: {primary_keyword}
+
+MACRO CONTEXT ANALYSIS:
+{macro_context}
+
+MICRO CONTEXT ANALYSIS:
+{micro_context}
+
+CURRENT CONTENT STRUCTURE:
+{content[:2000]}
+
+Generate a comprehensive CONTENT BRIEF using Koray's 4-column framework:
+
+## 1. CONTEXTUAL VECTOR (The Flow)
+- List all headings in optimal logical sequence (H1 → H2 → H3)
+- Ensure straight, proper context without interruptions
+- Order by search demand and semantic closeness
+- For each heading, explain WHY it's positioned there
+- Identify the central search intent for the root document
+
+## 2. CONTEXTUAL HIERARCHY (The Weight)
+- Assign coverage weight to each section (% of content)
+- Macro context sections should get 60-70% of content
+- Micro context sections should get 30-40% of content
+- Specify heading levels (H1, H2, H3) strategically
+- Recommend word count ranges for each major section
+
+## 3. CONTEXTUAL STRUCTURE (The Format)
+- Specify format for each section (paragraph, list, table, Q&A)
+- Provide article methodology rules:
+  * Start with definitions
+  * Use answer-first approach (no questions in headings)
+  * Answer-Evidence-Context formula for each section
+  * Specify where to use boolean questions (FAQ only)
+  * Modality instructions (factual vs. research-based vs. suggestions)
+  * Required elements (dates, units, measurements, citations)
+- Include specific co-occurrence instructions for distributional semantics
+- Specify anchor segments for discourse integration
+
+## 4. CONTEXTUAL CONNECTIONS (Internal Linking)
+- Identify 5-10 strategic internal link opportunities
+- Specify exact anchor text for each link
+- Indicate placement priority (top, middle, bottom)
+- Suggest related pages in the semantic content network:
+  * Root document recommendation
+  * Supporting seed articles
+  * Node articles for broader topical coverage
+- Explain the semantic relationship for each link
+
+## 5. OPTIMIZATION RECOMMENDATIONS
+Based on the analysis, provide specific recommendations:
+- Missing elements from macro context
+- Weak areas in micro context
+- Improvements to contextual vector (heading flow)
+- Enhancements to distributional semantics (co-occurrence)
+- Title tag optimization (macro context)
+- Meta description optimization (macro + micro context)
+- FAQ section questions to add
+
+Provide actionable, specific recommendations ready for implementation."""
+
+    return call_ai_model(prompt, model, max_tokens=6000)
+
+def analyze_distributional_semantics(content, nlp, semantic_model):
+    """Analyze co-occurrence patterns and distributional semantics"""
+
+    doc = nlp(content[:5000])  # Limit for performance
+
+    # Extract sentences
+    sentences = [sent.text for sent in doc.sents if len(sent.text.split()) > 5][:50]
+
+    # Extract paragraphs
+    paragraphs = [p.strip() for p in content.split('\n\n') if len(p.strip().split()) > 20][:20]
+
+    # Simple co-occurrence analysis
+    from collections import Counter
+    from itertools import combinations
+
+    # Get significant terms (nouns and proper nouns)
+    significant_terms = []
+    for token in doc:
+        if token.pos_ in ['NOUN', 'PROPN'] and not token.is_stop and len(token.text) > 3:
+            significant_terms.append(token.text.lower())
+
+    # Count term frequencies
+    term_freq = Counter(significant_terms)
+    top_terms = [term for term, count in term_freq.most_common(30)]
+
+    # Find co-occurrences in sentences
+    co_occur_matrix = {}
+    for sent in sentences:
+        sent_terms = [term for term in top_terms if term in sent.lower()]
+        if len(sent_terms) >= 2:
+            for term1, term2 in combinations(sent_terms, 2):
+                pair = tuple(sorted([term1, term2]))
+                co_occur_matrix[pair] = co_occur_matrix.get(pair, 0) + 1
+
+    # Sort by frequency
+    top_co_occurrences = sorted(co_occur_matrix.items(), key=lambda x: x[1], reverse=True)[:15]
+
+    return {
+        'top_terms': term_freq.most_common(20),
+        'co_occurrences': top_co_occurrences,
+        'sentence_count': len(sentences),
+        'paragraph_count': len(paragraphs)
+    }
+
+def validate_primary_entity(content, claimed_entity, model):
+    """Validate if the claimed primary keyword is actually the main entity"""
+
+    prompt = f"""You are an expert in Koray Tuğberk GÜBÜR's Semantic SEO framework.
+
+The user claims the primary keyword/entity is: "{claimed_entity}"
+
+Analyze this content and determine if this is truly the central entity:
+
+CONTENT:
+{content[:2000]}
+
+Provide:
+1. **Validation**: Is "{claimed_entity}" the true primary entity? (Yes/No)
+2. **Confidence Level**: (High/Medium/Low)
+3. **Actual Primary Entity**: If different, what is it?
+4. **Reasoning**: Explain your analysis
+5. **Macro Context Alignment**: Does "{claimed_entity}" reflect the true macro context?
+
+Be specific and analytical in your response."""
+
+    return call_ai_model(prompt, model, max_tokens=1000)
+
+def generate_gap_analysis(content, primary_keyword, macro_context, micro_context, model):
+    """Identify specific gaps and missing elements in the content"""
+
+    prompt = f"""You are an expert content optimizer using Koray Tuğberk GÜBÜR's Semantic SEO framework.
+
+PRIMARY ENTITY: {primary_keyword}
+
+MACRO CONTEXT ANALYSIS:
+{macro_context[:1500]}
+
+MICRO CONTEXT ANALYSIS:
+{micro_context[:1500]}
+
+CURRENT CONTENT:
+{content[:3000]}
+
+Perform a detailed GAP ANALYSIS identifying what's MISSING or WEAK:
+
+## 1. MACRO CONTEXT GAPS
+- Missing EAV (Entity-Attribute-Value) pairs that should be included
+- Weak or unclear source context signals
+- User intent misalignment
+- Missing topical clusters (core vs. author sections)
+
+## 2. MICRO CONTEXT GAPS
+- Missing semantically relevant entities
+- Weak predicates (relationships between concepts)
+- Missing temporal elements (dates, durations, timelines)
+- Insufficient conditional synonyms
+- Missing co-occurring term clusters
+- Absent question types (boolean, definitional, comparative, etc.)
+
+## 3. DISTRIBUTIONAL SEMANTICS GAPS
+- Terms that should co-occur but don't
+- Missing contextual dance patterns
+- Weak word proximities
+
+## 4. CONTENT STRUCTURE GAPS
+- Missing or poorly structured headings
+- Incorrect contextual hierarchy (macro/micro balance)
+- Missing internal linking opportunities
+- Weak contextual vector (heading flow)
+
+For EACH gap identified, provide:
+- **What's missing**: Specific element
+- **Why it matters**: Impact on semantic SEO
+- **Where to add it**: Specific section/paragraph
+- **Example**: Concrete text suggestion WITH SOURCE ATTRIBUTION
+
+CITATION REQUIREMENTS:
+- For all factual claims, statistics, and data in examples, include source attribution
+- Format: "According to [Organization/Study, Year], ..."
+- If no source available, use: "[Source needed: verify this claim]"
+- NEVER fabricate specific numbers without attribution
+
+Be highly specific and actionable. Writers should know exactly what to add."""
+
+    return call_ai_model(prompt, model, max_tokens=4000)
+
+def generate_optimization_action_plan(content, primary_keyword, macro_context, micro_context, gap_analysis, model):
+    """Generate prioritized, actionable optimization steps for writers"""
+
+    prompt = f"""You are an expert content optimizer using Koray Tuğberk GÜBÜR's Semantic SEO framework.
+
+PRIMARY ENTITY: {primary_keyword}
+
+MACRO CONTEXT:
+{macro_context[:1000]}
+
+MICRO CONTEXT:
+{micro_context[:1000]}
+
+GAP ANALYSIS:
+{gap_analysis[:2000]}
+
+CURRENT CONTENT:
+{content[:2000]}
+
+Generate a WRITER-FRIENDLY OPTIMIZATION ACTION PLAN with specific, copy-paste ready suggestions.
+
+## PRIORITY 1: CRITICAL FIXES (Do These First)
+For each critical fix:
+- **Action**: Specific change to make
+- **Location**: Exact section/paragraph (e.g., "After H2: Introduction")
+- **Before**: Current text (if applicable)
+- **After**: Replacement text (copy-paste ready)
+- **Reasoning**: Why this improves semantic SEO
+
+## PRIORITY 2: IMPORTANT ENHANCEMENTS (Do These Next)
+Same format as Priority 1
+
+## PRIORITY 3: NICE-TO-HAVE IMPROVEMENTS (Do If Time Permits)
+Same format as Priority 1
+
+## HEADING OPTIMIZATION
+Current heading structure vs. Optimized heading structure
+- Show BEFORE and AFTER for each heading
+- Explain the semantic improvement
+
+## CO-OCCURRENCE OPTIMIZATION
+Specific paragraphs where term clusters should appear together:
+- **Section**: Where to add
+- **Terms to co-occur**: List the 3-5 terms
+- **Example paragraph**: Copy-paste ready text that includes proper co-occurrence
+
+## INTERNAL LINKING RECOMMENDATIONS
+- **Anchor text**: Exact text to use
+- **Link target**: Where it should link to (describe the topic)
+- **Annotation text**: Text to appear before/after the link
+- **Placement**: Exact location in content
+
+## ENTITY-ATTRIBUTE-VALUE ADDITIONS
+Missing EAV pairs to add:
+- **Entity - Attribute**: What's missing
+- **Where to add**: Specific section
+- **Example sentence**: Copy-paste ready
+
+## MACRO CONTEXT STRENGTHENING
+- **Current macro context score**: Weak/Moderate/Strong
+- **Specific improvements**: What to change
+- **Example**: Before/After text with source attributions
+
+CRITICAL CITATION REQUIREMENTS FOR ALL EXAMPLES:
+- ALWAYS include source attribution for statistics, facts, and specific claims
+- Format: "According to [Source Name/Study, Year], ..."
+- Or use footnote markers: "[1]" with reference at bottom
+- If source unknown, use: "[Source needed: verify X statistic]"
+- NEVER fabricate specific numbers or statistics without attribution
+- Generic statements don't need citations, but specific data always does
+
+Make every suggestion copy-paste ready with proper citations. Writers should be able to implement changes immediately."""
+
+    return call_ai_model(prompt, model, max_tokens=6000)
+
+def generate_optimized_version(content, primary_keyword, action_plan, model):
+    """Generate a fully optimized version of the content based on the action plan"""
+
+    prompt = f"""You are an expert content writer implementing Koray Tuğberk GÜBÜR's Semantic SEO framework.
+
+PRIMARY ENTITY: {primary_keyword}
+
+OPTIMIZATION ACTION PLAN:
+{action_plan[:3000]}
+
+CURRENT CONTENT:
+{content}
+
+Generate a FULLY OPTIMIZED VERSION of this content by implementing ALL the recommendations from the action plan.
+
+REQUIREMENTS:
+1. Maintain or expand the original word count
+2. Implement ALL Priority 1 and Priority 2 changes
+3. Optimize heading structure for contextual vector
+4. Add missing EAV (Entity-Attribute-Value) pairs naturally
+5. Ensure proper co-occurrence of term clusters in relevant sections
+6. Strengthen macro context (60-70% of content)
+7. Add micro context elements (30-40% of content)
+8. Include internal linking anchor text with proper annotation
+9. Add missing temporal elements, predicates, and conditional synonyms
+10. Ensure proper discourse flow with anchor segments
+
+OUTPUT FORMAT:
+- Clean Markdown
+- Properly structured headings (H1, H2, H3)
+- Natural, readable prose
+- Ready to publish
+
+Generate the complete optimized article now."""
+
+    return call_ai_model(prompt, model, max_tokens=8000)
+
+def optimize_section_by_section(content, primary_keyword, action_plan, nlp, model):
+    """Optimize content section by section for granular control"""
+
+    # Extract sections based on H2 headings
+    sections = []
+    current_section = {"heading": "Introduction", "content": ""}
+
+    lines = content.split('\n')
+    for line in lines:
+        if line.startswith('## ') and not line.startswith('### '):
+            # New H2 section
+            if current_section["content"]:
+                sections.append(current_section)
+            current_section = {"heading": line.replace('## ', ''), "content": line + "\n"}
+        else:
+            current_section["content"] += line + "\n"
+
+    # Add last section
+    if current_section["content"]:
+        sections.append(current_section)
+
+    # Optimize each section
+    optimized_sections = []
+
+    for idx, section in enumerate(sections):
+        section_heading = section["heading"]
+        section_content = section["content"]
+
+        # Extract relevant action items for this section
+        relevant_actions = f"Focus on improvements related to section: {section_heading}"
+
+        prompt = f"""You are an expert content writer implementing Koray Tuğberk GÜBÜR's Semantic SEO framework.
+
+PRIMARY ENTITY: {primary_keyword}
+
+OPTIMIZATION ACTION PLAN (Full):
+{action_plan[:1500]}
+
+CURRENT SECTION TO OPTIMIZE:
+Heading: {section_heading}
+
+Content:
+{section_content}
+
+TASK: Optimize ONLY this section by:
+1. Implementing relevant Priority 1 and Priority 2 changes from the action plan
+2. Adding missing EAV pairs that relate to this section's topic
+3. Ensuring proper co-occurrence of relevant term clusters
+4. Strengthening semantic relationships
+5. Adding citations and sources for any factual claims (format: "According to [Source], ..." or include [1] footnote markers)
+6. Maintaining or expanding word count
+7. Preserving the heading structure (H2, H3 levels)
+
+IMPORTANT CITATION REQUIREMENTS:
+- ALWAYS provide source attribution for statistics, facts, and claims
+- Format: "According to [Organization Name Study, Year], statistic..."
+- Or use footnote markers: "Germany receives 1.5 million immigrants annually.[1]"
+- If you don't have a real source, use placeholders: "[Source needed: verify statistic]"
+- NEVER make up specific numbers without attribution
+
+OUTPUT:
+- Optimized version of this section ONLY
+- Clean Markdown
+- Include the heading
+- Natural, readable prose
+- Include source attributions for all claims
+
+Generate the optimized section now."""
+
+        optimized_section = call_ai_model(prompt, model, max_tokens=2000)
+
+        optimized_sections.append({
+            "original_heading": section_heading,
+            "original_content": section_content,
+            "optimized_content": optimized_section,
+            "section_number": idx + 1
+        })
+
+    return optimized_sections
+
 # === MAIN APP ===
 def main():
     st.markdown('<p class="main-header">✍️ Blog Post Optimizer</p>', unsafe_allow_html=True)
@@ -597,7 +1083,7 @@ def main():
         nlp, semantic_model = load_nlp_models()
     
     # Main Tabs
-    tab1, tab2 = st.tabs(["📝 Outline Optimizer", "✨ Draft Optimizer"])
+    tab1, tab2, tab3 = st.tabs(["📝 Outline Optimizer", "✨ Draft Optimizer", "🎯 Semantic SEO Analyzer"])
     
     # === TAB 1: OUTLINE OPTIMIZER ===
     with tab1:
@@ -884,6 +1370,525 @@ def main():
                         create_download_link(optimized_draft, final_filename),
                         unsafe_allow_html=True
                     )
+
+    # === TAB 3: SEMANTIC SEO ANALYZER ===
+    with tab3:
+        st.header("🎯 Semantic SEO Content Analyzer")
+        st.markdown("**Powered by Koray Tuğberk GÜBÜR's Semantic SEO Framework**")
+        st.markdown("Analyze content line-by-line for macro/micro context, entity-attribute-value relationships, and generate comprehensive content briefs.")
+
+        st.markdown("---")
+
+        # Input Section
+        col1_sem, col2_sem = st.columns([2, 1])
+
+        with col1_sem:
+            primary_entity = st.text_input(
+                "Primary Keyword/Main Entity *",
+                placeholder="e.g., Germany, Kidney Stones, How Long Do Teeth Pores Stay Open After Whitening",
+                key="semantic_entity",
+                help="This can be a single word, phrase, or complete question - whatever represents your central topic"
+            )
+
+            content_input = st.text_area(
+                "Content Draft (Markdown) *",
+                placeholder="Paste your blog post content here...",
+                height=400,
+                key="semantic_content"
+            )
+
+            uploaded_semantic = st.file_uploader(
+                "Or Upload Content File",
+                type=['txt', 'md'],
+                key="semantic_upload",
+                help="Upload your content as Markdown or text file"
+            )
+
+        with col2_sem:
+            st.markdown("### Analysis Options")
+
+            validate_entity = st.checkbox(
+                "Validate Primary Entity",
+                value=True,
+                help="Confirm if your claimed primary entity is actually the main topic"
+            )
+
+            include_distrib_semantics = st.checkbox(
+                "Include Distributional Semantics",
+                value=True,
+                help="Analyze co-occurrence patterns and term relationships"
+            )
+
+            generate_brief = st.checkbox(
+                "Generate Content Brief",
+                value=True,
+                help="Create comprehensive 4-column content brief (Koray's framework)"
+            )
+
+            st.markdown("---")
+
+            generate_gap_analysis_ui = st.checkbox(
+                "Generate Gap Analysis",
+                value=True,
+                help="Identify specific missing elements and weaknesses"
+            )
+
+            generate_action_plan = st.checkbox(
+                "Generate Action Plan",
+                value=True,
+                help="Create prioritized, copy-paste ready optimization steps for writers"
+            )
+
+            generate_optimized = st.checkbox(
+                "Optimize Section-by-Section",
+                value=False,
+                help="Optimize each H2 section individually for granular control (95% more usable than full rewrites)"
+            )
+
+            st.markdown("---")
+            st.markdown("### Framework Elements")
+            st.info("""
+**Macro Context:**
+- Primary Topic
+- Domain/Authority
+- User Intent
+- Search Persona
+- Main Benefits
+- EAV Inventory
+- Topical Clusters
+- Link Hub
+
+**Micro Context:**
+- Entities & Attributes
+- Values & Predicates
+- Temporal Elements
+- Conditional Synonyms
+- Co-occurring Terms
+- Question Types
+            """)
+
+        # Handle file upload
+        if uploaded_semantic:
+            content_input = uploaded_semantic.read().decode('utf-8')
+            st.success("✅ Content uploaded successfully!")
+
+        st.markdown("---")
+
+        # Analysis Button
+        if st.button("🚀 Analyze Content", type="primary", use_container_width=True, key="analyze_semantic"):
+            if not primary_entity or not content_input:
+                st.error("⚠️ Please provide both primary entity and content!")
+            else:
+                # Initialize session state for results
+                if 'semantic_results' not in st.session_state:
+                    st.session_state.semantic_results = {}
+
+                # Step 1: Validate Primary Entity
+                if validate_entity:
+                    with st.spinner("🔍 Step 1: Validating primary entity..."):
+                        validation_result = validate_primary_entity(content_input, primary_entity, selected_model)
+                        st.session_state.semantic_results['validation'] = validation_result
+
+                        if validation_result:
+                            st.success("✅ Entity validation complete!")
+                            with st.expander("📋 Entity Validation Results", expanded=True):
+                                st.markdown(validation_result)
+
+                # Step 2: Extract Macro Context
+                with st.spinner("🎯 Step 2: Extracting macro context elements..."):
+                    progress = st.progress(0)
+
+                    macro_context = extract_macro_context(
+                        content_input,
+                        primary_entity,
+                        nlp,
+                        semantic_model,
+                        selected_model
+                    )
+                    st.session_state.semantic_results['macro_context'] = macro_context
+                    progress.progress(33)
+
+                    if macro_context:
+                        st.success("✅ Macro context extracted!")
+                        with st.expander("📊 Macro Context Analysis", expanded=True):
+                            st.markdown(macro_context)
+
+                # Step 3: Extract Micro Context
+                with st.spinner("🔬 Step 3: Extracting micro context elements..."):
+                    micro_context = extract_micro_context(
+                        content_input,
+                        primary_entity,
+                        nlp,
+                        semantic_model,
+                        selected_model
+                    )
+                    st.session_state.semantic_results['micro_context'] = micro_context
+                    progress.progress(66)
+
+                    if micro_context:
+                        st.success("✅ Micro context extracted!")
+                        with st.expander("🔬 Micro Context Analysis", expanded=True):
+                            st.markdown(micro_context)
+
+                # Step 4: Distributional Semantics (Optional)
+                if include_distrib_semantics:
+                    with st.spinner("📈 Step 4: Analyzing distributional semantics..."):
+                        distrib_results = analyze_distributional_semantics(content_input, nlp, semantic_model)
+                        st.session_state.semantic_results['distributional'] = distrib_results
+
+                        st.success("✅ Distributional semantics analyzed!")
+                        with st.expander("📈 Co-occurrence Analysis", expanded=False):
+                            st.markdown("### Top Terms")
+                            df_terms = pd.DataFrame(distrib_results['top_terms'], columns=['Term', 'Frequency'])
+                            st.dataframe(df_terms, use_container_width=True)
+
+                            st.markdown("### Top Co-occurring Term Pairs")
+                            co_occur_data = [
+                                {'Term 1': pair[0], 'Term 2': pair[1], 'Co-occurrences': count}
+                                for (pair, count) in distrib_results['co_occurrences']
+                            ]
+                            df_cooccur = pd.DataFrame(co_occur_data)
+                            st.dataframe(df_cooccur, use_container_width=True)
+
+                            st.info(f"""
+**Analysis Summary:**
+- Sentences analyzed: {distrib_results['sentence_count']}
+- Paragraphs analyzed: {distrib_results['paragraph_count']}
+- Unique significant terms: {len(distrib_results['top_terms'])}
+- Co-occurrence pairs found: {len(distrib_results['co_occurrences'])}
+                            """)
+
+                progress.progress(100)
+
+                # Step 5: Generate Gap Analysis (Optional)
+                gap_analysis_result = None
+                if generate_gap_analysis_ui and macro_context and micro_context:
+                    st.markdown("---")
+                    with st.spinner("🔍 Step 5: Performing gap analysis..."):
+                        gap_analysis_result = generate_gap_analysis(
+                            content_input,
+                            primary_entity,
+                            macro_context,
+                            micro_context,
+                            selected_model
+                        )
+                        st.session_state.semantic_results['gap_analysis'] = gap_analysis_result
+
+                        if gap_analysis_result:
+                            st.success("✅ Gap analysis complete!")
+                            with st.expander("🔍 Gap Analysis - What's Missing", expanded=True):
+                                st.markdown(gap_analysis_result)
+                                st.info("💡 **For Writers**: Each gap includes WHERE to add it and EXAMPLE text to use.")
+
+                # Step 6: Generate Action Plan (Optional)
+                action_plan_result = None
+                if generate_action_plan and macro_context and micro_context:
+                    st.markdown("---")
+                    with st.spinner("📋 Step 6: Generating optimization action plan..."):
+                        # Use gap analysis if available, otherwise pass empty string
+                        gap_for_plan = gap_analysis_result if gap_analysis_result else "No gap analysis performed."
+
+                        action_plan_result = generate_optimization_action_plan(
+                            content_input,
+                            primary_entity,
+                            macro_context,
+                            micro_context,
+                            gap_for_plan,
+                            selected_model
+                        )
+                        st.session_state.semantic_results['action_plan'] = action_plan_result
+
+                        if action_plan_result:
+                            st.success("✅ Optimization action plan generated!")
+                            with st.expander("📋 Writer Action Plan - Copy-Paste Ready", expanded=True):
+                                st.markdown(action_plan_result)
+                                st.success("✅ **For Writers**: All suggestions are copy-paste ready. Prioritized by importance.")
+
+                            # Download Action Plan separately
+                            action_plan_filename = f"action_plan_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+                            st.markdown(
+                                create_download_link(action_plan_result, action_plan_filename),
+                                unsafe_allow_html=True
+                            )
+
+                # Step 7: Generate Content Brief (Optional)
+                if generate_brief and macro_context and micro_context:
+                    st.markdown("---")
+                    with st.spinner("📝 Step 7: Generating comprehensive content brief..."):
+                        progress_brief = st.progress(0)
+
+                        content_brief = generate_content_brief(
+                            content_input,
+                            primary_entity,
+                            macro_context,
+                            micro_context,
+                            selected_model
+                        )
+                        st.session_state.semantic_results['content_brief'] = content_brief
+                        progress_brief.progress(100)
+
+                        if content_brief:
+                            st.success("✅ Content brief generated!")
+
+                            st.markdown("---")
+                            st.markdown("## 📋 Comprehensive Content Brief")
+                            st.markdown("**Based on Koray Tuğberk GÜBÜR's 4-Column Framework**")
+                            st.markdown(content_brief)
+
+                            # Download Content Brief
+                            st.markdown("---")
+                            brief_filename = f"content_brief_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+                            st.markdown(
+                                create_download_link(content_brief, brief_filename),
+                                unsafe_allow_html=True
+                            )
+
+                # Step 8: Section-by-Section Optimization (Optional)
+                if generate_optimized and action_plan_result:
+                    st.markdown("---")
+                    st.markdown("## 🎯 Section-by-Section Optimization")
+                    st.info("✅ This optimizes each H2 section individually, giving you granular control. Review and accept/reject each section.")
+
+                    with st.spinner("✨ Step 8: Optimizing sections (this may take 1-2 minutes)..."):
+                        optimized_sections = optimize_section_by_section(
+                            content_input,
+                            primary_entity,
+                            action_plan_result,
+                            nlp,
+                            selected_model
+                        )
+                        st.session_state.semantic_results['optimized_sections'] = optimized_sections
+
+                        if optimized_sections:
+                            st.success(f"✅ {len(optimized_sections)} sections optimized!")
+
+                            st.markdown("---")
+                            st.markdown("### 📊 Review Sections Individually")
+                            st.markdown("**Use the toggles below to accept/reject each optimized section**")
+
+                            # Initialize acceptance state if not exists
+                            if 'accepted_sections' not in st.session_state:
+                                st.session_state.accepted_sections = [True] * len(optimized_sections)
+
+                            for idx, section in enumerate(optimized_sections):
+                                with st.expander(f"📄 Section {section['section_number']}: {section['original_heading']}", expanded=False):
+                                    # Acceptance toggle
+                                    accept_col, stats_col = st.columns([1, 3])
+
+                                    with accept_col:
+                                        st.session_state.accepted_sections[idx] = st.checkbox(
+                                            "✅ Accept",
+                                            value=st.session_state.accepted_sections[idx],
+                                            key=f"accept_section_{idx}"
+                                        )
+
+                                    with stats_col:
+                                        orig_words = len(section['original_content'].split())
+                                        opt_words = len(section['optimized_content'].split())
+                                        word_change = opt_words - orig_words
+                                        st.metric("Word Count Change", f"{opt_words}", delta=f"{word_change:+,}")
+
+                                    st.markdown("---")
+
+                                    # Side-by-side comparison
+                                    comp_col1, comp_col2 = st.columns(2)
+
+                                    with comp_col1:
+                                        st.markdown("**Original:**")
+                                        st.markdown(section['original_content'][:800] + "..." if len(section['original_content']) > 800 else section['original_content'])
+
+                                    with comp_col2:
+                                        st.markdown("**Optimized:**")
+                                        st.markdown(section['optimized_content'][:800] + "..." if len(section['optimized_content']) > 800 else section['optimized_content'])
+
+                                    # Full versions
+                                    with st.expander("View Full Versions"):
+                                        st.markdown("**Full Original:**")
+                                        st.markdown(section['original_content'])
+                                        st.markdown("---")
+                                        st.markdown("**Full Optimized:**")
+                                        st.markdown(section['optimized_content'])
+
+                            # Generate final optimized version with accepted sections
+                            st.markdown("---")
+                            st.markdown("### 📥 Download Final Version")
+
+                            final_content = ""
+                            for idx, section in enumerate(optimized_sections):
+                                if st.session_state.accepted_sections[idx]:
+                                    final_content += section['optimized_content'] + "\n\n"
+                                else:
+                                    final_content += section['original_content'] + "\n\n"
+
+                            # Show acceptance summary
+                            accepted_count = sum(st.session_state.accepted_sections)
+                            st.info(f"**Accepted Sections:** {accepted_count} / {len(optimized_sections)}")
+
+                            # Download final version
+                            optimized_filename = f"optimized_content_sections_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+                            st.markdown(
+                                create_download_link(final_content, optimized_filename),
+                                unsafe_allow_html=True
+                            )
+
+                            st.success("✅ **For Writers**: Review each section, accept the good ones, reject the rest. Download combines your selections!")
+
+                elif generate_optimized and not action_plan_result:
+                    st.warning("⚠️ Please enable 'Generate Action Plan' to optimize sections.")
+
+                # Summary and Download All
+                st.markdown("---")
+                st.markdown("## 📦 Analysis Summary & Downloads")
+
+                summary_col1, summary_col2, summary_col3, summary_col4 = st.columns(4)
+
+                with summary_col1:
+                    if 'validation' in st.session_state.semantic_results:
+                        st.metric("Entity Validation", "✅")
+                    st.metric("Macro Context", "✅")
+                    st.metric("Micro Context", "✅")
+
+                with summary_col2:
+                    if include_distrib_semantics:
+                        st.metric("Distributional Analysis", "✅")
+                    if generate_gap_analysis_ui and 'gap_analysis' in st.session_state.semantic_results:
+                        st.metric("Gap Analysis", "✅")
+
+                with summary_col3:
+                    if generate_action_plan and 'action_plan' in st.session_state.semantic_results:
+                        st.metric("Action Plan", "✅")
+                    if generate_brief and 'content_brief' in st.session_state.semantic_results:
+                        st.metric("Content Brief", "✅")
+
+                with summary_col4:
+                    if generate_optimized and 'optimized_sections' in st.session_state.semantic_results:
+                        st.metric("Section Optimization", "✅")
+                    st.metric("Framework", "Koray SEO")
+
+                # Highlight actionable outputs for writers
+                st.markdown("---")
+                st.success("✅ **For Writers**: Download the Action Plan for copy-paste ready optimization steps!")
+
+                # Download complete report
+                if st.session_state.semantic_results:
+                    st.markdown("---")
+
+                    complete_report = f"""# Semantic SEO Analysis Report
+**Primary Entity:** {primary_entity}
+**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+**Framework:** Koray Tuğberk GÜBÜR's Semantic SEO
+
+---
+
+"""
+
+                    if 'validation' in st.session_state.semantic_results:
+                        complete_report += f"""## Entity Validation
+
+{st.session_state.semantic_results['validation']}
+
+---
+
+"""
+
+                    if 'macro_context' in st.session_state.semantic_results:
+                        complete_report += f"""## Macro Context Analysis
+
+{st.session_state.semantic_results['macro_context']}
+
+---
+
+"""
+
+                    if 'micro_context' in st.session_state.semantic_results:
+                        complete_report += f"""## Micro Context Analysis
+
+{st.session_state.semantic_results['micro_context']}
+
+---
+
+"""
+
+                    if 'distributional' in st.session_state.semantic_results:
+                        distrib = st.session_state.semantic_results['distributional']
+                        complete_report += f"""## Distributional Semantics Analysis
+
+### Top Terms
+"""
+                        for term, freq in distrib['top_terms']:
+                            complete_report += f"- {term}: {freq}\n"
+
+                        complete_report += f"""
+### Top Co-occurring Pairs
+"""
+                        for (pair, count) in distrib['co_occurrences']:
+                            complete_report += f"- {pair[0]} + {pair[1]}: {count} times\n"
+
+                        complete_report += "\n---\n\n"
+
+                    if 'gap_analysis' in st.session_state.semantic_results:
+                        complete_report += f"""## Gap Analysis - What's Missing
+
+{st.session_state.semantic_results['gap_analysis']}
+
+---
+
+"""
+
+                    if 'action_plan' in st.session_state.semantic_results:
+                        complete_report += f"""## Optimization Action Plan (Copy-Paste Ready)
+
+{st.session_state.semantic_results['action_plan']}
+
+---
+
+"""
+
+                    if 'content_brief' in st.session_state.semantic_results:
+                        complete_report += f"""## Content Brief (4-Column Framework)
+
+{st.session_state.semantic_results['content_brief']}
+
+---
+
+"""
+
+                    if 'optimized_sections' in st.session_state.semantic_results:
+                        complete_report += f"""## Section-by-Section Optimizations
+
+"""
+                        for section in st.session_state.semantic_results['optimized_sections']:
+                            complete_report += f"""### Section {section['section_number']}: {section['original_heading']}
+
+**Optimized Version:**
+
+{section['optimized_content']}
+
+---
+
+"""
+
+                    # Download button for complete report
+                    report_filename = f"semantic_seo_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+                    st.markdown(
+                        create_download_link(complete_report, report_filename),
+                        unsafe_allow_html=True
+                    )
+
+                    st.success("✅ Complete semantic SEO analysis finished! Download your complete report above.")
+
+                    # Add writer instructions
+                    st.info("""
+**📝 For Your Writing Team:**
+
+1. **Start with Gap Analysis** - See what's missing with source-attributed examples
+2. **Review Action Plan** - Prioritized, copy-paste ready steps (with citations!)
+3. **Use Content Brief** - Strategic framework for overall structure
+4. **Review Optimized Sections** - Accept/reject individual H2 sections for granular control
+
+✅ **All examples include source attributions** - fact-check before publishing!
+🎯 **Action Plan is most actionable** - prioritized with before/after examples
+                    """)
 
 if __name__ == "__main__":
     main()
