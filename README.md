@@ -68,6 +68,52 @@ The `.python-version` file is already included in this repository, so if you clo
 9. Dedicated FAQ Section
 10. Optimized Title & Meta
 
+### Tab 3: Semantic SEO Analyzer (Koray Tuğberk GÜBÜR Framework)
+
+**The most advanced semantic content analyzer based on industry-leading SEO framework**
+
+#### Macro Context Extraction
+- **Primary Topic/Central Entity**: Validates and identifies the true central entity
+- **Domain/Authority (Source Context)**: Determines brand identity and monetization strategy
+- **User's Intent**: Analyzes dominant search intent (Informational, Transactional, Navigational, Investigational)
+- **Search Persona**: Identifies demographics, psychographics, and expertise level
+- **Main Benefits**: Extracts value propositions connected to source context
+- **Entity-Attribute-Value (EAV) Inventory**: Generates 10-15 key attribute-value pairs
+- **Intent & Topical Clusters**: Groups core section (monetization) vs. author section (topical authority)
+- **Link Hub Potential**: Recommends ideal root document H1 for semantic content network
+
+#### Micro Context Extraction
+- **Semantically Relevant Entities**: Identifies 10-15 supporting entities
+- **Key Attributes & Values**: Extracts characteristics with specific data points
+- **Predicates**: Analyzes relationships connecting entities and attributes
+- **Temporal Elements**: Identifies time-sensitive information, dates, durations
+- **Conditional Synonyms**: Finds phrases using conjunctive words (and, or)
+- **Co-occurring Terms**: Discovers 5-7 term clusters for distributional semantics
+- **Annotation Text Patterns**: Suggests text for internal link context
+- **Anchor Segments**: Recommends mutual words for discourse flow
+- **Question Types**: Categorizes boolean, definitional, grouping, comparative, temporal questions
+- **Modality & Measurement Units**: Extracts scientific terminology and units
+- **Macro vs Micro Boundary**: Identifies transition from main to supplementary content
+
+#### Distributional Semantics Analysis
+- **Term Frequency Analysis**: Top 20 significant terms with occurrence counts
+- **Co-occurrence Matrix**: Identifies term pairs that appear together in sentences
+- **Contextual Dance Mapping**: Reveals natural semantic relationships
+- **Statistical Linguistics**: Quantitative analysis of term distributions
+
+#### Content Brief Generation (4-Column Framework)
+1. **Contextual Vector (The Flow)**: Optimal heading sequence with reasoning
+2. **Contextual Hierarchy (The Weight)**: Coverage allocation (60-70% macro, 30-40% micro)
+3. **Contextual Structure (The Format)**: Article methodology rules and format specifications
+4. **Contextual Connections (Internal Linking)**: Strategic link opportunities with anchor text
+
+#### Comprehensive Reporting
+- **Entity Validation Report**: Confirms primary entity accuracy
+- **Complete Semantic Analysis**: Macro + Micro context in structured format
+- **Distributional Semantics Tables**: Visual co-occurrence data
+- **Actionable Content Brief**: Ready-to-implement optimization roadmap
+- **Downloadable Reports**: Markdown export for all analyses
+
 ## 📋 Requirements
 
 - **Python 3.11** (recommended) or Python 3.12 with modifications
@@ -183,22 +229,69 @@ Click "Deploy!" and wait for the app to build. First deployment may take 3-5 min
    canine behavior
    ```
 4. **Click "Optimize Draft"**: Two-stage process:
-   
+
    **Stage 1 - Keyword Optimization:**
    - Relevance scoring for each keyword
    - Placement suggestions with context
    - AI-generated integration snippets
-   
+
    **Stage 2 - AI Tool Optimization:**
    - 10-item checklist application
    - Full draft rewrite for AI search visibility
    - Compliance report
 
-5. **Review Optimizations**: 
+5. **Review Optimizations**:
    - Keyword integration table
    - Checklist metrics
    - Final optimized draft
 6. **Download**: Export as Markdown
+
+### Semantic SEO Analyzer Workflow
+
+1. **Enter Primary Entity**: Can be a single word ("Germany"), phrase ("Kidney Stones"), or complete question ("How Long Do Teeth Pores Stay Open After Whitening")
+2. **Paste Content**: Your blog post draft in Markdown format
+3. **Select Analysis Options**:
+   - ✅ Validate Primary Entity (confirms if your claimed entity is accurate)
+   - ✅ Include Distributional Semantics (co-occurrence analysis)
+   - ✅ Generate Content Brief (4-column framework)
+4. **Click "Analyze Content"**: Multi-stage semantic analysis:
+
+   **Stage 1 - Entity Validation:**
+   - Validates claimed primary entity
+   - Identifies actual central entity if different
+   - Provides confidence level and reasoning
+
+   **Stage 2 - Macro Context Extraction:**
+   - Identifies 8 macro context elements
+   - Generates EAV (Entity-Attribute-Value) inventory
+   - Maps topical clusters (core vs. author sections)
+   - Recommends link hub structure
+
+   **Stage 3 - Micro Context Extraction:**
+   - Extracts 12+ micro context elements
+   - Identifies semantically relevant entities
+   - Analyzes predicates and relationships
+   - Categorizes question types
+   - Maps macro vs. micro content boundaries
+
+   **Stage 4 - Distributional Semantics (Optional):**
+   - Analyzes top 20 significant terms
+   - Generates co-occurrence matrix
+   - Identifies term pairs and contextual dance
+
+   **Stage 5 - Content Brief Generation (Optional):**
+   - Contextual Vector: Optimal heading flow
+   - Contextual Hierarchy: Coverage weights
+   - Contextual Structure: Format specifications
+   - Contextual Connections: Internal linking strategy
+
+5. **Review Analysis**:
+   - Expandable sections for each analysis stage
+   - Visual tables for distributional semantics
+   - Complete content brief with actionable recommendations
+6. **Download Reports**:
+   - Individual reports (entity validation, content brief)
+   - Complete semantic SEO analysis report
 
 ## 🧠 Technical Architecture
 
@@ -315,7 +408,16 @@ For issues, feature requests, or questions:
 
 ## 🎯 Roadmap
 
+Recent additions:
+- [✅] **Semantic SEO Analyzer** - Koray Tuğberk GÜBÜR framework implementation
+- [✅] Entity-Attribute-Value (EAV) extraction
+- [✅] Distributional semantics analysis
+- [✅] 4-column content brief generator
+
 Future enhancements:
+- [ ] Topical map visualization tool
+- [ ] Semantic content network builder
+- [ ] SERP analysis integration for competitive semantic analysis
 - [ ] PDF export functionality
 - [ ] Real-time SerpAPI integration for live search data
 - [ ] Multi-language support
